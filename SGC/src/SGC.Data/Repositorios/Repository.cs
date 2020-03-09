@@ -4,6 +4,7 @@ using SGC.Business.Models.Entidades;
 using SGC.Data.Contexto;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -30,45 +31,47 @@ namespace SGC.Data.Repositorios
 
         #region Public Methods
 
-        //TODO ADICIONAR RESTANTE DA IMPLEMENTAÇÃO
-        public Task Atualizar(TEntity entity)
+        public virtual async Task Atualizar(TEntity entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Update(entity);
+            await Salvar();
         }
 
-        public Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<IEnumerable<TEntity>> Buscar(Expression<Func<TEntity, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await _dbSet.AsNoTracking().Where(predicate).ToArrayAsync();
         }
 
-        public Task Criar(TEntity entity)
+        public virtual async Task Criar(TEntity entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Add(entity);
+            await Salvar();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _dbContext?.Dispose();
         }
 
-        public Task Excluir(long id)
+        public virtual async Task Excluir(long id)
         {
-            throw new NotImplementedException();
+            _dbSet.Remove(new TEntity { Id = id });
+            await Salvar();
         }
 
-        public Task<List<TEntity>> Listar()
+        public virtual async Task<List<TEntity>> Listar()
         {
-            throw new NotImplementedException();
+            return await _dbSet.ToListAsync();
         }
 
-        public Task<Entity> ObterPorId(long id)
+        public virtual async Task<Entity> ObterPorId(long id)
         {
-            throw new NotImplementedException();
+            return await _dbSet.FindAsync(id);
         }
 
-        public Task<long> Salvar()
+        public async Task<long> Salvar()
         {
-            throw new NotImplementedException();
+            return await _dbContext.SaveChangesAsync();
         }
 
         #endregion Public Methods
