@@ -12,11 +12,11 @@ namespace SGC.Data.Mapeamentos
         {
             builder.HasKey(c => c.Id);
 
-            builder.Property(c => c.NomeCategoria)
+            builder.Property(c => c.Nome)
                 .IsRequired()
                 .HasColumnType("varchar(100)");
 
-            builder.Property(c => c.DescricaoCategoria)
+            builder.Property(c => c.Descricao)
                 .IsRequired()
                 .HasColumnType("varchar(100)");
 

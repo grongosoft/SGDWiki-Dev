@@ -4,4 +4,12 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Validacoes\Documentos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="8.6.2" />
+  </ItemGroup>
+
 </Project>
