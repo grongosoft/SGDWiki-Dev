@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,8 +21,13 @@ namespace SGD.App.Configuracoes
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            servicos.AddDbContext<ApplicationDBContext>(options =>
+            servicos.AddDefaultIdentity<IdentityUser>()
+                .AddDefaultUI(UIFramework.Bootstrap4)
+                .AddEntityFrameworkStores<IdentityContext>();
+
+            servicos.AddDbContext<IdentityContext>(options =>
                 options.UseSqlServer(configuracoes.GetConnectionString("DefaultConnection")));
+
 
             return servicos;
         }

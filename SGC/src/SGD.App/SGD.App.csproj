@@ -6,15 +6,27 @@
     <UserSecretsId>a65e8a00-bfe4-44a3-a540-39624bfa7429</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20200310114924_Identity.cs" />
+    <Compile Remove="Migrations\20200310114924_Identity.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\SGC.Data\SGC.Data.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
