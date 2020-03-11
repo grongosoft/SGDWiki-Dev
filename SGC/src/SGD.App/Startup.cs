@@ -38,6 +38,7 @@ namespace SGD.App
         public void ConfigureServices(IServiceCollection services)
         {
             services.AdicionarIdentityDeConfiguracao(Configuration);
+            services.ResolveDependencies();
 
             services.AddDbContext<DataContext>(options =>
                 {
@@ -64,6 +65,8 @@ namespace SGD.App
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+            app.GlobalizationConfig();
+
 
             app.UseMvc(routes =>
             {
