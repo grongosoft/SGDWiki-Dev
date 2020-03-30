@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using System.ComponentModel;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace SGD.App.ViewModel
 
         [Required(ErrorMessage = "O Campo {0} é de preenchimento obrigatório!")]
         [StringLength(100, ErrorMessage = "O Campo {0} precisa ter entre {2} e {1} caracteres!", MinimumLength = 6)]
+        [DisplayName("Descrição")]
         public string Descricao { get; set; }
 
         [Required(ErrorMessage = "O Campo {0} é de preenchimento obrigatório!")]
@@ -19,6 +21,8 @@ namespace SGD.App.ViewModel
 
         [HiddenInput]
         public string OperadorId { get; set; }
+        [DisplayName("Nome do Operador")]
+        public string NomeOperador { get; set; }
 
     }
 }

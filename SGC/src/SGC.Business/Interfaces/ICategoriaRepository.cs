@@ -1,4 +1,5 @@
-﻿using SGC.Business.Models.Entidades;
+﻿using System.Threading.Tasks;
+using SGC.Business.Models.Entidades;
 
 namespace SGC.Business.Interfaces
 {

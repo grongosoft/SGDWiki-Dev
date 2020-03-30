@@ -7,11 +7,11 @@ namespace SGC.Business.Interfaces
     {
         #region Public Methods
 
-        bool ExisteNotificacao();
-
         void Handle(Notificacao notificacao);
 
         List<Notificacao> ObterNotificacoes();
+
+        bool TemNotificacao();
 
         #endregion Public Methods
     }

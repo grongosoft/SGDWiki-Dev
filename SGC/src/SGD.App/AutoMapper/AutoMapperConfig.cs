@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using SGC.Business.Models.Entidades;
 using SGD.App.ViewModel;
 
