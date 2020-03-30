@@ -5,5 +5,6 @@ namespace SGC.Business.Interfaces
 {
     public interface ICategoriaRepository : IRepository<Categoria>
     {
+        Task<Categoria> ObterCategoriaPorId(long id);
     }
 }

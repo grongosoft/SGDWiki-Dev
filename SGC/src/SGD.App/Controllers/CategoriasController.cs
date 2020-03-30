@@ -41,13 +41,13 @@ namespace SGD.App.Controllers
 
         #region Public Methods
 
-        [Route("novo-fornecedor")]
+        [Route("nova-categoria")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [Route("novo-fornecedor")]
+        [Route("nova-categoria")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CategoriaViewModel categoriaViewModel)
@@ -64,6 +64,7 @@ namespace SGD.App.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Route("excluir-categoria/{id:long}")]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -73,22 +74,37 @@ namespace SGD.App.Controllers
 
             var categoria = await _context.Categorias
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (categoria == null)
-            {
-                return NotFound();
-            }
 
-            return View(categoria);
+            var categoriaViewModel = new CategoriaViewModel
+            {
+                Id = categoria.Id,
+                OperadorId = categoria.OperadorId,
+                Descricao = categoria.Descricao,
+                Nome = categoria.Nome
+            };
+
+            return View(categoriaViewModel);
         }
 
+        [Route("excluir-categoria/{id:long}")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var categoria = await _context.Categorias.FindAsync(id);
-            _context.Categorias.Remove(categoria);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var usuarioCriador = UsuarioCriadorCategoria(id);
+
+            if (usuarioCriador.Result)
+            {
+                await _categoriaService.Remover(id);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            //TODO VALIDAR OPERAÇÃO
+
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Details(long? id)
@@ -159,7 +175,7 @@ namespace SGD.App.Controllers
         [Route("lista-de-categorias")]
         public async Task<IActionResult> Index()
         {
-            var operadorCategoria = await ObterOperadorCategoria();
+            var operadorCategoria = await ObterCategorias();
 
             return View(operadorCategoria);
         }
@@ -173,7 +189,7 @@ namespace SGD.App.Controllers
             return _context.Categorias.Any(e => e.Id == id);
         }
 
-        private async Task<List<CategoriaViewModel>> ObterOperadorCategoria()
+        private async Task<List<CategoriaViewModel>> ObterCategorias()
         {
             var categoriaUsuario = new List<CategoriaViewModel>();
             var categorias = await _categoriaRepository.Listar();
@@ -198,6 +214,20 @@ namespace SGD.App.Controllers
             }
 
             return categoriaUsuario;
+        }
+
+        private async Task<bool> UsuarioCriadorCategoria(long categoriaId)
+        {
+            var usuario = _customUsers.ObterUsuarioLogado();
+
+            var categoria = _mapper.Map<CategoriaViewModel>(await _categoriaRepository.ObterCategoriaPorId(categoriaId));
+
+            if (categoria.OperadorId == usuario)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         #endregion Private Methods

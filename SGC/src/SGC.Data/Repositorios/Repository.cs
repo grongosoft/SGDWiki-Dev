@@ -56,6 +56,7 @@ namespace SGC.Data.Repositorios
         public virtual async Task Excluir(long id)
         {
             _dbSet.Remove(new TEntity { Id = id });
+
             await Salvar();
         }
 

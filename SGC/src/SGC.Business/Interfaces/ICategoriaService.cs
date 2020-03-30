@@ -1,9 +1,10 @@
-﻿using SGC.Business.Models.Entidades;
+﻿using System;
+using SGC.Business.Models.Entidades;
 using System.Threading.Tasks;
 
 namespace SGC.Business.Interfaces
 {
-    public interface ICategoriaService
+    public interface ICategoriaService : IDisposable
     {
         #region Public Methods
 

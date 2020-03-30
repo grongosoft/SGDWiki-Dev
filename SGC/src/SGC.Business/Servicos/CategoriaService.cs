@@ -39,11 +39,6 @@ namespace SGC.Business.Servicos
             await _categoriaRepository.Atualizar(categoria);
         }
 
-        public void Dispose()
-        {
-            _categoriaRepository?.Dispose();
-        }
-
         public async Task Criar(Categoria categoria)
         {
             if (!ExecutarValidacao(new CategoriaValidation(), categoria))
@@ -56,6 +51,11 @@ namespace SGC.Business.Servicos
             }
 
             await _categoriaRepository.Criar(categoria);
+        }
+
+        public void Dispose()
+        {
+            _categoriaRepository?.Dispose();
         }
 
         public async Task Remover(long id)
