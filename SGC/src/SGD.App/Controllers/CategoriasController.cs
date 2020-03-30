@@ -8,7 +8,6 @@ using SGC.Data.Contexto;
 using SGD.App.Extensoes;
 using SGD.App.ViewModel;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SGD.App.Controllers
@@ -60,7 +59,7 @@ namespace SGD.App.Controllers
             var categoria = _mapper.Map<Categoria>(categoriaViewModel);
             await _categoriaService.Criar(categoria);
 
-            //CRIAR VALIDAÇÕES
+            //TODO: CRIAR VALIDAÇÕES
             return RedirectToAction(nameof(Index));
         }
 
@@ -91,9 +90,11 @@ namespace SGD.App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var usuarioCriador = UsuarioCriadorCategoria(id);
+            var categoriaViewModel = ObterCategoria(id);
 
-            if (usuarioCriador.Result)
+            var usuario = _customUsers.ObterUsuarioLogado();
+
+            if (categoriaViewModel.Result.OperadorId == usuario)
             {
                 await _categoriaService.Remover(id);
             }
@@ -125,6 +126,7 @@ namespace SGD.App.Controllers
             return View(categoria);
         }
 
+        [Route("editar-categoria/{id:long}")]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -132,44 +134,43 @@ namespace SGD.App.Controllers
                 return NotFound();
             }
 
-            var categoria = await _context.Categorias.FindAsync(id);
-            if (categoria == null)
+            var categoria = await _context.Categorias
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            var categoriaViewModel = new CategoriaViewModel
             {
-                return NotFound();
-            }
-            return View(categoria);
+                Id = categoria.Id,
+                OperadorId = categoria.OperadorId,
+                Descricao = categoria.Descricao,
+                Nome = categoria.Nome
+            };
+
+            return View(categoriaViewModel);
         }
 
         [HttpPost]
+        [Route("editar-categoria/{id:long}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("OperadorId,Descricao,Nome,Id")] Categoria categoria)
+        public async Task<IActionResult> Edit(long id, CategoriaViewModel categoriaViewModel)
         {
-            if (id != categoria.Id)
-            {
+            if (id != categoriaViewModel.Id)
                 return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(categoria);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CategoriaExists(categoria.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(categoria);
+            var categoriaAtualizacao = await ObterCategoria(id);
+
+            //TODO: VALIDAR USUARIO CRIADOR
+
+            if (!ModelState.IsValid)
+                return View(categoriaViewModel);
+
+            categoriaAtualizacao.OperadorId = categoriaViewModel.OperadorId;
+            categoriaAtualizacao.Descricao = categoriaViewModel.Descricao;
+            categoriaAtualizacao.Nome = categoriaViewModel.Nome;
+
+            await _categoriaService.Atualizar(_mapper.Map<Categoria>(categoriaAtualizacao));
+            //TODO: VALIDAR OPERAÇÃO
+
+            return RedirectToAction("Index");
         }
 
         [Route("lista-de-categorias")]
@@ -184,9 +185,11 @@ namespace SGD.App.Controllers
 
         #region Private Methods
 
-        private bool CategoriaExists(long id)
+        private async Task<CategoriaViewModel> ObterCategoria(long categoriaId)
         {
-            return _context.Categorias.Any(e => e.Id == id);
+            var categoria = _mapper.Map<CategoriaViewModel>(await _categoriaRepository.ObterCategoriaPorId(categoriaId));
+
+            return categoria;
         }
 
         private async Task<List<CategoriaViewModel>> ObterCategorias()
@@ -214,20 +217,6 @@ namespace SGD.App.Controllers
             }
 
             return categoriaUsuario;
-        }
-
-        private async Task<bool> UsuarioCriadorCategoria(long categoriaId)
-        {
-            var usuario = _customUsers.ObterUsuarioLogado();
-
-            var categoria = _mapper.Map<CategoriaViewModel>(await _categoriaRepository.ObterCategoriaPorId(categoriaId));
-
-            if (categoria.OperadorId == usuario)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         #endregion Private Methods

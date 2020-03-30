@@ -1,22 +1,23 @@
-﻿@model SGC.Business.Models.Entidades.Categoria
+﻿@model SGD.App.ViewModel.CategoriaViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Categoria";
 }
 
-<h1>Edit</h1>
 
-<h4>Categoria</h4>
+<h3 style="padding-top: 30px">@ViewData["Title"]</h3>
+
 <hr />
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form enctype="multipart/form-data" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="OperadorId" class="control-label"></label>
-                <input asp-for="OperadorId" class="form-control" />
-                <span asp-validation-for="OperadorId" class="text-danger"></span>
-            </div>
+            @*<div class="form-group">
+                    <label asp-for="NomeOperador" class="control-label"></label>
+                    <input asp-for="NomeOperador" class="form-control" />
+                    <span asp-validation-for="NomeOperador" class="text-danger"></span>
+                </div>*@
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>
                 <input asp-for="Descricao" class="form-control" />
@@ -28,14 +29,18 @@
                 <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OperadorId" />
+
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a class="btn btn-info" href="javascript:window.history.back();">Voltar</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}
