@@ -25,6 +25,10 @@
   src: url('../fonts/raleway/Raleway-Bold.ttf'); 
 }
 
+.teste {
+    float: right;
+}
+
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
 

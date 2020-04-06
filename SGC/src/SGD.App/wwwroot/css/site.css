@@ -50,6 +50,8 @@ a {
     -moz-transition: all 0.4s;
 }
 
+
+
 h1, h2, h3, h4, h5, h6 {
     margin: 0px;
 }
@@ -118,4 +120,36 @@ body {
     /* Set the fixed height of the footer here */
     height: 60px;
     line-height: 60px; /* Vertically center the text there */
+}
+
+/*Adicionados*/
+.filtroLeft {
+    float: left;
+    margin-left: 10px;
+    min-width: 265px;
+}
+
+.filtroRight {
+    float: right;
+    
+}
+
+.cmd12 {
+    width: auto;
+}
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    .filtroLeft {
+        float: left;
+        margin-left: 10px;
+        min-width: 95%;
+    }
+}
+
+@media only screen and (max-width: 479px) {
+    .filtroLeft {
+        float: left;
+        margin-left: 10px;
+        min-width: 95%;
+    }
 }
