@@ -1,4 +1,5 @@
-﻿
+﻿@model PerguntaRespostaViewModel
+
 @{
     ViewData["Title"] = "Filtro de Pesquisa";
 }
@@ -12,31 +13,107 @@
         <form asp-action="">
             <div class="filtroLeft form-group ">
                 <label @*asp-for="Nome"*@ class="control-label">Wiki Pesquisa</label>
-                <input @*asp-for="Nome"*@ class="form-control" placeholder="Tipo: Banco de Dados, Algoritmo, Outros " />
+                <input @*asp-for="Nome"*@ class="form-control" placeholder="" />
                 <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
             </div>
 
-            <div class="filtroLeft form-group">
-
-                <label @*asp-for="Nome"*@ class="control-label">Tipo de Pesquisa</label>
-                <input @*asp-for="Nome"*@ class="form-control" placeholder="Tipo: Banco de Dados, Algoritmo, Outros " />
-                <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
+            <div class=" filtroLeft form-group ">
+                <label for="">Tipo de Pesquisa</label>
+                <select class="form-control">
+                    <option value="0">Exatamente</option>
+                    <option value="1">Começando com</option>
+                    <option value="2">Terminando com</option>
+                    <option value="3">Que contenha</option>
+                </select>
             </div>
+
 
             <div class="filtroLeft form-group">
                 <label @*asp-for="Nome"*@ class="control-label">Categoria</label>
-                <input @*asp-for="Nome"*@ class="form-control" placeholder="Tipo: Banco de Dados, Algoritmo, Outros " />
+                <input @*asp-for="Nome"*@ class="form-control" placeholder="" />
                 <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
             </div>
 
             <div class="filtroLeft form-group">
                 <label @*asp-for="Nome"*@ class="control-label">Usuário</label>
-                <input @*asp-for="Nome"*@ class="form-control" placeholder="Tipo: Banco de Dados, Algoritmo, Outros " />
+                <input @*asp-for="Nome"*@ class="form-control" placeholder="E-mail" />
                 <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
             </div>
+           
+            <div class="form-group pesquisarMarg">
+                <input type="submit" value="Pesquisar" class="btn btn-primary " />
+            </div>
+           
+            <hr />
 
+            <div class="form-group">
+                <label @*asp-for="Nome"*@>Pergunta</label>
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                Código
+                                @*@Html.DisplayNameFor(model => model.Id)*@
+                            </th>
+                            <th>
+                                Pergunta
+                                @*@Html.DisplayNameFor(model => model.Nome)*@
+                            </th>
+                            <th>
+                                Tipo de Pesquisa
+                                @*@Html.DisplayNameFor(model => model.Descricao)*@
+                            </th>
+                            <th>
+                                Categoria
+                                @*@Html.DisplayNameFor(model => model.NomeOperador)*@
+
+                            </th>
+                            <th>
+                                Usuário
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @*@foreach (var item in Model)
+                    {*@
+                        <tr>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.Id)*@
+
+                            </td>
+
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.Nome)*@
+
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.Descricao)*@
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NomeOperador)*@
+                            </td>
+                            <td class="text-right">
+                                @*<a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><spam class="fa fa-search"></spam></a>*@
+                                <a class="btn btn-warning" @*asp-action="Edit" asp-route-id="@item.Id"*@><spam class="fa fa-pencil-alt"></spam></a>
+                                <a class="btn btn-danger" @*asp-action="Delete" asp-route-id="@item.Id"*@><spam class="fa fa-trash"></spam></a>
+                            </td>
+                        </tr>
+                        @*}*@
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group">
+                <label for="">Resposta</label>
+
+            </div>
+            <div class="comment-text-area form-group">
+                <textarea class="textinput" readonly=""></textarea>
+            </div>
 
         </form>
+
+        
     </div>
 </div>
 
