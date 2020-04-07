@@ -31,9 +31,8 @@
 
             <div class=" filtroLeft form-group ">
                 <label for="">Categoria</label>
-               
-                    @Html.DropDownListFor(x => x.CategoriaViewModel, Model.CategoriaViewModel.Select(m => new SelectListItem { Value = m.Nome, Text = m.Nome }), new {@class = "form-control"})
-              
+
+                @Html.DropDownListFor(x => x.CategoriaViewModel, Model.CategoriaViewModel.Select(m => new SelectListItem { Value = m.Nome, Text = m.Nome }), new { @class = "form-control" })
             </div>
 
             <div class="filtroLeft form-group">

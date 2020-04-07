@@ -10,6 +10,8 @@ namespace SGD.App.AutoMapper
         public AutoMapperConfig()
         {
             CreateMap<Categoria, CategoriaViewModel>().ReverseMap();
+            CreateMap<Pergunta, PerguntaViewModel>().ReverseMap();
+            CreateMap<Resposta, RespostaViewModel>().ReverseMap();
         }
     }
 }

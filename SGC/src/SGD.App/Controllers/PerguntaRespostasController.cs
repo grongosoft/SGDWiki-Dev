@@ -49,10 +49,10 @@ namespace SGD.App.Controllers
             {
                 var categoriaViewModel = new CategoriaViewModel
                 {
-                    Nome = categoria.Nome
+                    Nome = categoria.Nome,
+                    Id = categoria.Id
+
                 };
-
-
 
                 perguntaRepostaViewModel.CategoriaViewModel.Add(categoriaViewModel);
             }

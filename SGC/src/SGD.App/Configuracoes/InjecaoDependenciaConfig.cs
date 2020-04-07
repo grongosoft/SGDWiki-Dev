@@ -18,8 +18,10 @@ namespace SGD.App.Configuracoes
         {
             servicos.AddScoped<DataContext>();
             servicos.AddScoped<ICategoriaRepository, CategoriaRepository>();
+            servicos.AddScoped<IPerguntaRepository, PerguntaRepository>();
 
             servicos.AddScoped<ICategoriaService, CategoriaService>();
+            servicos.AddScoped<IPerguntaService, PerguntaService>();
             servicos.AddScoped<ICustomUser, CustomUsers>();
             servicos.AddScoped<INotificador, Notificador>();
 

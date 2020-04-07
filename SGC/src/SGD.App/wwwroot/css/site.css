@@ -133,8 +133,10 @@ body {
     margin-left: 10px;
 }
 
-.filtroRight {
-    float: right;
+.filtroR {
+    float: left;
+    margin-left: 10px;
+    min-width: 73%;
 }
 
 .cmd12 {
@@ -147,6 +149,12 @@ body {
         margin-left: 10px;
         min-width: 95%;
     }
+
+    .filtroR {
+        float: left;
+        margin-left: 10px;
+        min-width: 100%;
+    }
 }
 
 @media only screen and (max-width: 479px) {
@@ -154,6 +162,12 @@ body {
         float: left;
         margin-left: 10px;
         min-width: 95%;
+    }
+
+    .filtroR {
+        float: left;
+        margin-left: 10px;
+        min-width: 100%;
     }
 }
 
@@ -173,3 +187,4 @@ body {
     resize: none;
     
 }
+
