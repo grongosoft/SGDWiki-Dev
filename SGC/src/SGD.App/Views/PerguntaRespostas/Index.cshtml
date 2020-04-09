@@ -1,4 +1,4 @@
-﻿@model PerguntaRespostaViewModel
+﻿@model IEnumerable<SGD.App.ViewModel.PerguntaRespostaViewModel>
 
 
 @{
@@ -12,6 +12,7 @@
 <div class="row">
     <div class="col-md-12 cmd12">
         <form asp-action="">
+
             <div class="filtroLeft form-group ">
                 <label @*asp-for="Nome"*@ class="control-label">Wiki Pesquisa</label>
                 <input @*asp-for="Nome"*@ class="form-control" placeholder="" />
@@ -31,8 +32,8 @@
 
             <div class=" filtroLeft form-group ">
                 <label for="">Categoria</label>
-
-                @Html.DropDownListFor(x => x.CategoriaViewModel, Model.CategoriaViewModel.Select(m => new SelectListItem { Value = m.Nome, Text = m.Nome }), new { @class = "form-control" })
+                @Html.DropDownListFor(n => n.ToList().FirstOrDefault().CategoriaId, Model.FirstOrDefault()?.CategoriasList, "Selecione", new { @class = "form-control" })
+                @*@Html.DropDownListFor(x => x.CategoriaViewModel, Model?.CategoriaViewModel.Select(m => new SelectListItem { Value = m.Nome, Text = m.Nome }), new { @class = "form-control" })*@
             </div>
 
             <div class="filtroLeft form-group">
@@ -42,64 +43,101 @@
             </div>
 
             <div class="form-group pesquisarMarg">
-                <input type="submit" value="Pesquisar" class="btn btn-primary " />
+                @*<a class="btn btn-primary" asp-action="Pesquisar">Pesquisar</a>*@
+                <input type="submit" asp-action="Pesquisar" value="Pesquisar" class="btn btn-primary " />
             </div>
 
             <hr />
 
             <div class="form-group">
                 <label @*asp-for="Nome"*@>Pergunta</label>
+
                 <table class="table table-hover">
                     <thead class="thead-dark">
                         <tr>
                             <th>
                                 Código
-                                @*@Html.DisplayNameFor(model => model.Id)*@
+                                @*@Html.DisplayNameFor(model => model.OperadorId)*@
                             </th>
+
                             <th>
                                 Pergunta
                                 @*@Html.DisplayNameFor(model => model.Nome)*@
                             </th>
+
                             <th>
                                 Tipo de Pesquisa
                                 @*@Html.DisplayNameFor(model => model.Descricao)*@
                             </th>
+
                             <th>
                                 Categoria
                                 @*@Html.DisplayNameFor(model => model.NomeOperador)*@
 
                             </th>
+
                             <th>
                                 Usuário
+                            </th>
+                            <th>
+
+                            </th>
+                            <th>
+
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @*@foreach (var item in Model)
-                            {*@
-                        <tr>
-                            <td>
-                                @*@Html.DisplayFor(modelItem => item.Id)*@
+                        @foreach (var item in Model.OrderBy(m=>m.PerguntaId))
+                        {
+                            <tr>
+                                <td>
 
-                            </td>
+                                    @if (item.PerguntaId != null && item.PerguntaId > 0)
+                                    {
+                                        @Html.DisplayFor(modelItem => item.PerguntaId)
 
-                            <td>
-                                @*@Html.DisplayFor(modelItem => item.Nome)*@
+                                    }
+                                </td>
 
-                            </td>
-                            <td>
-                                @*@Html.DisplayFor(modelItem => item.Descricao)*@
-                            </td>
-                            <td>
-                                @*@Html.DisplayFor(modelItem => item.NomeOperador)*@
-                            </td>
-                            <td class="text-right">
-                                @*<a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><spam class="fa fa-search"></spam></a>*@
-                                <a class="btn btn-warning" @*asp-action="Edit" asp-route-id="@item.Id"*@><spam class="fa fa-pencil-alt"></spam></a>
-                                <a class="btn btn-danger" @*asp-action="Delete" asp-route-id="@item.Id"*@><spam class="fa fa-trash"></spam></a>
-                            </td>
-                        </tr>
-                        @*}*@
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.DescricaoPergunta))
+                                    {
+                                        @Html.DisplayFor(modelItem => item.DescricaoPergunta)
+                                    }
+                                </td>
+
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Descricao)*@
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DescricaoCategoria)
+                                </td>
+
+                                <td>
+
+                                </td>
+                                <td >
+                                    @if (item.PerguntaId != null && item.PerguntaId > 0)
+                                    {
+                                        @Html.ActionLink("Ver Resposta", "Pesquisar", new { id = item.PerguntaId }, new { @class="tdt" })
+
+                                    }
+
+                                </td>
+
+                                <td class="text-right">
+                                    @if (item.PerguntaId != null && item.PerguntaId > 0)
+                                    {
+                                        @*<a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id"><spam class="fa fa-search"></spam></a>*@
+                                        <a class="btn btn-warning" @*asp-action="Edit" asp-route-id="@item.Id"*@><spam class="fa fa-pencil-alt"></spam></a>
+                                        <a class="btn btn-danger" @*asp-action="Delete" asp-route-id="@item.Id"*@><spam class="fa fa-trash"></spam></a>
+                                    }
+                                </td>
+
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -109,7 +147,14 @@
 
             </div>
             <div class="comment-text-area form-group">
-                <textarea class="textinput" readonly=""></textarea>
+                <textarea class="textinput" readonly="">
+                      @foreach (var item in Model)
+                      {
+                          if (!string.IsNullOrEmpty(item.DescricaoResposta)) { 
+                              @Html.DisplayFor(modelItem => item.DescricaoResposta)
+                          }
+                      }
+                </textarea>
             </div>
 
         </form>
@@ -117,4 +162,10 @@
 
     </div>
 </div>
+
+
+
+
+
+
 

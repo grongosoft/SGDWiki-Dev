@@ -10,6 +10,7 @@ namespace SGC.Business.Interfaces
     {
         Task<Pergunta> ObterPerguntaRepostaPorCategoria(long categoriaId);
         Task<Pergunta> ObterPerguntaRepostaPorUsuario(long usuarioId);
+        Task<Pergunta> ObterPerguntaPorId(long perguntaId);
 
     }
 }

@@ -20,10 +20,13 @@ namespace SGD.App.Configuracoes
             servicos.AddScoped<ICategoriaRepository, CategoriaRepository>();
             servicos.AddScoped<IPerguntaRepository, PerguntaRepository>();
 
+            servicos.AddScoped<IRespostaRepository, RespostaRepository>();
+            servicos.AddScoped<IRespostaService, RespostaService>();
             servicos.AddScoped<ICategoriaService, CategoriaService>();
             servicos.AddScoped<IPerguntaService, PerguntaService>();
             servicos.AddScoped<ICustomUser, CustomUsers>();
             servicos.AddScoped<INotificador, Notificador>();
+
 
             //servicos.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

@@ -35,13 +35,13 @@ namespace SGD.App.Controllers
             _mapper = mapper;
         }
 
-        [Route("perguntaxresposta")]
+      
         public async Task<IActionResult> Index()
         {
             return View(await _context.Perguntas.ToListAsync());
         }
 
-        [Route("perguntaxresposta")]
+       
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -79,22 +79,27 @@ namespace SGD.App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PerguntaViewModel perguntaViewModel)
         {
-
+            perguntaViewModel.OperadorId = _customUsers.ObterUsuarioLogado();
 
             if (!ModelState.IsValid)
             {
-                return View(perguntaViewModel);
+                var categoriasViewModel = BuscarCategoriasCadastradas();
+              
+                var perguntaViewModels = new PerguntaViewModel
+
+                {
+                    CategoriasList = new SelectList(categoriasViewModel.Result, "Id", "Nome")
+                };
+
+                //TODO: VALIDAR MSG PARA CATEGORIA!
+                return View(perguntaViewModels);
 
             }
-
-            perguntaViewModel.OperadorId = _customUsers.ObterUsuarioLogado();
+          
            
             //TODO:CRIAR OPERAÇÃO VÁLIDA!
             var pergunta = _mapper.Map<Pergunta>(perguntaViewModel);
             await _perguntaService.Adicionar(pergunta);
-        
-
-
 
             TempData["Success"] = "Pergunta x Resposta Cadastrada com sucesso!";
 

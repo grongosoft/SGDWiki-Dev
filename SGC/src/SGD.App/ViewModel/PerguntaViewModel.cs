@@ -9,8 +9,9 @@ namespace SGD.App.ViewModel
     {
         [Key]
         [DisplayName("Código")]
-        public long Id { get; set; }
-
+        public long? Id { get; set; }
+        
+        [Required(ErrorMessage = "O Campo Categoria é de preenchimento obrigatório!")]
         public long CategoriaId { get; set; }
 
         [Required(ErrorMessage = "O Campo {0} é de preenchimento obrigatório!")]
@@ -23,6 +24,7 @@ namespace SGD.App.ViewModel
         public RespostaViewModel Resposta { get; set; }
 
         //public List<CategoriaViewModel> CategoriasViewModel { get; set; }
+        //[Required(ErrorMessage = "O Campo Categoria é de preenchimento obrigatório!")]
 
         public SelectList CategoriasList { get; set; }
 

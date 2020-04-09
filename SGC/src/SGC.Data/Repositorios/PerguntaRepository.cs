@@ -2,6 +2,7 @@
 using SGC.Business.Models.Entidades;
 using SGC.Data.Contexto;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SGC.Data.Repositorios
@@ -12,6 +13,11 @@ namespace SGC.Data.Repositorios
 
         public PerguntaRepository(DataContext dbContext) : base(dbContext)
         {
+        }
+
+        public async Task<Pergunta> ObterPerguntaPorId(long perguntaId)
+        {
+           return _dbContext.Perguntas.FirstOrDefault(e => e.Id == perguntaId);
         }
 
         #endregion Public Constructors
