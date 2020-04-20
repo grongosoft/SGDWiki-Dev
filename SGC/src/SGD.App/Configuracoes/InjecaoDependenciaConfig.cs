@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SGC.Business.Interfaces;
 using SGC.Business.Notificacoes;
 using SGC.Business.Servicos;
@@ -16,21 +14,17 @@ namespace SGD.App.Configuracoes
 
         public static IServiceCollection ResolveDependencies(this IServiceCollection servicos)
         {
-            servicos.AddScoped<DataContext>();
+            servicos.AddTransient<DataContext>();
             servicos.AddScoped<ICategoriaRepository, CategoriaRepository>();
             servicos.AddScoped<IPerguntaRepository, PerguntaRepository>();
-
             servicos.AddScoped<IRespostaRepository, RespostaRepository>();
+
             servicos.AddScoped<IRespostaService, RespostaService>();
             servicos.AddScoped<ICategoriaService, CategoriaService>();
             servicos.AddScoped<IPerguntaService, PerguntaService>();
+
             servicos.AddScoped<ICustomUser, CustomUsers>();
             servicos.AddScoped<INotificador, Notificador>();
-
-
-            //servicos.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            // Or you can also register as follows
 
             servicos.AddHttpContextAccessor();
 

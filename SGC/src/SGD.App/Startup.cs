@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +11,8 @@ namespace SGD.App
 {
     public class Startup
     {
+        #region Public Constructors
+
         public Startup(IHostingEnvironment hostEnvironment)
         {
             var builder = new ConfigurationBuilder()
@@ -34,27 +29,27 @@ namespace SGD.App
             Configuration = builder.Build();
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AdicionarIdentityDeConfiguracao(Configuration);
-            services.ResolveDependencies();
-            services.AddAutoMapper(typeof(Startup));
+        #endregion Public Properties
 
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddConfiguracoesDoMVC();
+        #region Public Methods
 
-        }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/erro/500");
+                app.UseStatusCodePagesWithRedirects("/erro/{0}");
                 app.UseHsts();
             }
 
@@ -65,7 +60,6 @@ namespace SGD.App
             app.UseAuthentication();
             app.GlobalizationConfig();
 
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -73,5 +67,17 @@ namespace SGD.App
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AdicionarIdentityDeConfiguracao(Configuration);
+            services.ResolveDependencies();
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddConfiguracoesDoMVC();
+        }
+
+        #endregion Public Methods
     }
 }

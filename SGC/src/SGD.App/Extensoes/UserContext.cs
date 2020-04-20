@@ -1,19 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SGD.App.Data;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SGD.App.Extensoes
 {
     public abstract class UserContext<TEntity> : ICustomUsers<TEntity> where TEntity : IdentityUser, new()
     {
-        private readonly IdentityContext _idContext;
+        #region Protected Fields
+
         protected readonly DbSet<IdentityUser> _dbSet;
+
+        #endregion Protected Fields
+
+        #region Private Fields
+
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IdentityContext _idContext;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public UserContext(IdentityContext idContext, IHttpContextAccessor contextAccessor)
         {
@@ -21,6 +31,10 @@ namespace SGD.App.Extensoes
             _contextAccessor = contextAccessor;
             _dbSet = _idContext.Set<IdentityUser>();
         }
+
+        #endregion Public Constructors
+
+        #region Public Methods
 
         public void Dispose()
         {
@@ -34,7 +48,14 @@ namespace SGD.App.Extensoes
 
         public string ObterUsuarioLogado()
         {
-           return   _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return _contextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+
+        public async Task<IdentityUser> ObterUsuarioPorEmail(string email)
+        {
+            return _dbSet.Find(email);
+        }
+
+        #endregion Public Methods
     }
 }

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SGC.Business.Interfaces;
 using SGC.Data.Contexto;
+using SGD.App.Extensoes;
 using SGD.App.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +11,16 @@ using System.Threading.Tasks;
 
 namespace SGD.App.Controllers
 {
-    public class PerguntaRespostasController : Controller
+    [Authorize]
+    public class PerguntaRespostasController : BaseController
     {
         #region Private Fields
 
         private readonly ICategoriaRepository _categoriaRepository;
         private readonly DataContext _context;
+        private readonly ICustomUser _customUsers;
         private readonly IPerguntaRepository _perguntaRepository;
+
         private readonly IPerguntaService _perguntaService;
         private readonly IRespostaRepository _respostaRepository;
         private readonly IRespostaService _respostaService;
@@ -25,11 +30,13 @@ namespace SGD.App.Controllers
         #region Public Constructors
 
         public PerguntaRespostasController(DataContext context, ICategoriaRepository categoriaRepository, ICategoriaService categoriaService,
-            IPerguntaService perguntaService, IRespostaService respostaService, IPerguntaRepository perguntaRepository, IRespostaRepository respostaRepository)
+            IPerguntaService perguntaService, IRespostaService respostaService, IPerguntaRepository perguntaRepository, IRespostaRepository respostaRepository,
+             ICustomUser customUser, INotificador notificador) : base(notificador)
         {
             _context = context;
             _categoriaRepository = categoriaRepository;
 
+            _customUsers = customUser;
             _perguntaService = perguntaService;
             _perguntaRepository = perguntaRepository;
             _respostaService = respostaService;
@@ -53,27 +60,41 @@ namespace SGD.App.Controllers
 
             perguntasRespostaViewModel.Add(perguntaRespostaViewModel);
 
-            //if (perguntaRepostaViewModel.Result.CategoriaViewModel == null)
-            //    return RedirectToAction("Index");
-
             return View(perguntasRespostaViewModel);
         }
 
         [Route("Pesquisar/{id:long?}")]
-        public IActionResult Pesquisar(long? id)
+        public IActionResult Pesquisar(long? id, string inpPergunta, string inpEmail, long? optSelectedId, PerguntaRespostaViewModel perguntaRespostaViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                RedirectToAction(nameof(Index));
-            }
+            var perguntasRespostas = new List<PerguntaRespostaViewModel>();
 
             var categoriasViewModel = BuscarCategoriasCadastradas();
 
-            var perguntasRespostas = new List<PerguntaRespostaViewModel>();
+            var optSelecionado = optSelectedId != null ? optSelectedId.Value : (long?)null;
+            var categoriaId = perguntaRespostaViewModel != null ? perguntaRespostaViewModel.CategoriaId : null;
 
-            var perguntas = _perguntaRepository.Listar();
+            var usuario = _customUsers.ObterUsuarioPorEmail(inpEmail).Result;
 
-            foreach (var pergunta in perguntas.Result)
+            var email = usuario?.Email;
+
+            var response = _perguntaRepository.ObterPerguntaPorDescricao(inpPergunta, email, categoriaId, optSelecionado).Result;
+
+            if (response == null || response.Count == 0)
+            {
+                var perguntasRespostaViewModel = new List<PerguntaRespostaViewModel>();
+
+                perguntaRespostaViewModel = new PerguntaRespostaViewModel
+                {
+                    CategoriasList = new SelectList(categoriasViewModel.Result, "Id", "Nome")
+                };
+
+                perguntasRespostaViewModel.Add(perguntaRespostaViewModel);
+
+                TempData["Success"] = "A pergunta não retornou resultados!";
+                return View("Index", perguntasRespostaViewModel);
+            }
+
+            foreach (var pergunta in response)
             {
                 var categoria = _categoriaRepository.ObterCategoriaPorId(pergunta.CategoriaId).Result;
 
@@ -85,7 +106,6 @@ namespace SGD.App.Controllers
                     IdSelecionado = id,
                     CategoriasList = new SelectList(categoriasViewModel.Result, "Id", "Nome"),
                     DescricaoCategoria = categoria.Descricao
-
                 };
 
                 perguntasRespostas.Add(perguntaResposta);
@@ -98,7 +118,6 @@ namespace SGD.App.Controllers
                     var pergunta = _perguntaRepository.ObterPerguntaPorId(id.Value).Result;
                     var categoria = _categoriaRepository.ObterCategoriaPorId(pergunta.CategoriaId).Result;
 
-
                     var resposta = _respostaRepository.ObterRespostaPorPergunta(id.Value).Result;
                     var perguntaRespostaRemove = perguntasRespostas.FirstOrDefault(p => p.PerguntaId == id);
 
@@ -110,21 +129,17 @@ namespace SGD.App.Controllers
                         DescricaoResposta = resposta.Descricao,
                         CategoriasList = new SelectList(categoriasViewModel.Result, "Id", "Nome"),
                         DescricaoCategoria = categoria.Descricao
-
                     };
 
                     perguntasRespostas.Remove(perguntaRespostaRemove);
 
                     perguntasRespostas.Add(perguntaRespostaRenew);
                 }
+
+                return View("Index", perguntasRespostas);
             }
 
             return View("Index", perguntasRespostas);
-
-            //if (!ModelState.IsValid)
-            //    RedirectToAction(nameof(Index));
-            // return View(perguntaRespostaViewModel);
-            return RedirectToAction(nameof(Index));
         }
 
         #endregion Public Methods

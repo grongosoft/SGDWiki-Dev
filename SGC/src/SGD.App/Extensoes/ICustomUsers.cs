@@ -9,5 +9,6 @@ namespace SGD.App.Extensoes
     {
         Task<List<IdentityUser>> ListarUsuarios();
         string ObterUsuarioLogado();
+        Task<IdentityUser> ObterUsuarioPorEmail(string email);
     }
 }

@@ -1,15 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SGC.Business.Models.Entidades;
+using System;
 using System.Threading.Tasks;
-using SGC.Business.Models.Entidades;
 
 namespace SGC.Business.Interfaces
 {
     public interface IRespostaService : IDisposable
     {
+        #region Public Methods
+
         Task Adicionar(Resposta resposta);
+
         Task Atualizar(Resposta resposta);
+
         Task Remover(long id);
+
+        #endregion Public Methods
     }
 }

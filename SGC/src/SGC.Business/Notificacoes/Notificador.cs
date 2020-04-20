@@ -1,23 +1,25 @@
 ﻿using SGC.Business.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SGC.Business.Notificacoes
 {
     public class Notificador : INotificador
     {
+        private List<Notificacao> _notificacoes;
         public void Handle(Notificacao notificacao)
         {
-            throw new System.NotImplementedException();
+            _notificacoes = new List<Notificacao>();
         }
 
         public List<Notificacao> ObterNotificacoes()
         {
-            throw new System.NotImplementedException();
+            return _notificacoes;
         }
 
         public bool TemNotificacao()
         {
-            throw new System.NotImplementedException();
+            return _notificacoes.Any();
         }
     }
 }

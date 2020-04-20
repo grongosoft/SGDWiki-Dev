@@ -8,9 +8,8 @@ namespace SGC.Business.Interfaces
 {
     public interface IPerguntaRepository : IRepository<Pergunta>
     {
-        Task<Pergunta> ObterPerguntaRepostaPorCategoria(long categoriaId);
-        Task<Pergunta> ObterPerguntaRepostaPorUsuario(long usuarioId);
         Task<Pergunta> ObterPerguntaPorId(long perguntaId);
+        Task<List<Pergunta>> ObterPerguntaPorDescricao(string descricao, string email, long? categoriaId, long? likeId);
 
     }
 }

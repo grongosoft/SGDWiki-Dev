@@ -8,20 +8,25 @@
 
 <h3 style="padding-top: 50px">@ViewData["Title"]</h3>
 <hr />
-
+@if (TempData["Success"] != null)
+{
+    <div style="color: red; padding-bottom: 20px;">
+        <h5><strong>Atenção:</strong> @TempData["Success"].ToString()</h5>
+    </div>
+}
 <div class="row">
     <div class="col-md-12 cmd12">
         <form asp-action="">
 
             <div class="filtroLeft form-group ">
                 <label @*asp-for="Nome"*@ class="control-label">Wiki Pesquisa</label>
-                <input @*asp-for="Nome"*@ class="form-control" placeholder="" />
+                <input name="inpPergunta" class="form-control" placeholder="Digite uma pergunta..." />
                 <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
             </div>
 
             <div class=" filtroLeft form-group ">
                 <label for="">Tipo de Pesquisa</label>
-                <select class="form-control">
+                <select id="optSelectedId" name="optSelectedId" class="form-control" runat="server">
                     <option value="0">Exatamente</option>
                     <option value="1">Começando com</option>
                     <option value="2">Terminando com</option>
@@ -38,13 +43,13 @@
 
             <div class="filtroLeft form-group">
                 <label @*asp-for="Nome"*@ class="control-label">Usuário</label>
-                <input @*asp-for="Nome"*@ class="form-control" placeholder="E-mail" />
+                <input @*asp-for="Nome"*@ name="inpEmail" class="form-control" placeholder="E-mail" />
                 <span @*asp-validation-for="Nome"*@ class="text-danger"></span>
             </div>
 
             <div class="form-group pesquisarMarg">
                 @*<a class="btn btn-primary" asp-action="Pesquisar">Pesquisar</a>*@
-                <input type="submit" asp-action="Pesquisar" value="Pesquisar" class="btn btn-primary " />
+                <input type="submit" asp-action="Pesquisar" value="Pesquisar" name="optSelectedId" name="inpPergunta" name="inpEmail" class="btn btn-primary" />
             </div>
 
             <hr />
@@ -57,23 +62,18 @@
                         <tr>
                             <th>
                                 Código
-                                @*@Html.DisplayNameFor(model => model.OperadorId)*@
                             </th>
 
                             <th>
                                 Pergunta
-                                @*@Html.DisplayNameFor(model => model.Nome)*@
                             </th>
 
                             <th>
                                 Tipo de Pesquisa
-                                @*@Html.DisplayNameFor(model => model.Descricao)*@
                             </th>
 
                             <th>
                                 Categoria
-                                @*@Html.DisplayNameFor(model => model.NomeOperador)*@
-
                             </th>
 
                             <th>
@@ -88,7 +88,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.OrderBy(m=>m.PerguntaId))
+                        @foreach (var item in Model.OrderBy(m => m.PerguntaId))
                         {
                             <tr>
                                 <td>
@@ -116,12 +116,11 @@
                                 </td>
 
                                 <td>
-
                                 </td>
-                                <td >
+                                <td>
                                     @if (item.PerguntaId != null && item.PerguntaId > 0)
                                     {
-                                        @Html.ActionLink("Ver Resposta", "Pesquisar", new { id = item.PerguntaId }, new { @class="tdt" })
+                                        @Html.ActionLink("Ver Resposta", "Pesquisar", new { id = item.PerguntaId }, new { @class = "tdt" })
 
                                     }
 

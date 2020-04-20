@@ -1,11 +1,15 @@
-using System;
-
 namespace SGD.App.Models
 {
     public class ErrorViewModel
     {
-        public string RequestId { get; set; }
+        #region Public Properties
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        public int ErroCode { get; set; }
+
+        public string Mensagem { get; set; }
+
+        public string Titulo { get; set; }
+
+        #endregion Public Properties
     }
 }
